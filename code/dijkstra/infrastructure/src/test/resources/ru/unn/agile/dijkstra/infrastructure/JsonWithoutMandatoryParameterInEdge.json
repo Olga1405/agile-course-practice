@@ -1,0 +1,17 @@
+[
+  {
+    "weight":5,
+    "vertexLeft":{
+      "id":1
+    },
+    "vertexRight":{
+      "id":2
+    }
+  },
+  {
+    "weight":5,
+    "vertexRight":{
+      "id":3
+    }
+  }
+]

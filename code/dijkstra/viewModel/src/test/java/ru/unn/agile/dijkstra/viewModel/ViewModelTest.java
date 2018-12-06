@@ -1,5 +1,7 @@
 package ru.unn.agile.dijkstra.viewModel;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import ru.unn.agile.dijkstra.model.Vertex;
 
@@ -12,10 +14,26 @@ import java.nio.file.Paths;
 import static org.junit.Assert.assertEquals;
 
 public class ViewModelTest {
+    private ViewModel viewModel;
+
+    @Before
+    public void setUp() {
+        viewModel = new ViewModel(new FakeLogger());
+    }
+
+    @After
+    public void tearDown() {
+        viewModel = null;
+    }
+
+    protected void setExternalViewModel(final ViewModel viewModel) {
+        this.viewModel = viewModel;
+    }
 
     public  String getResourceAsString(final String path) {
         try {
             URL url = getClass().getResource(path);
+
             return new String(Files.readAllBytes(Paths.get(url.toURI())));
         } catch (IOException e) {
             e.printStackTrace();
@@ -27,7 +45,6 @@ public class ViewModelTest {
 
     @Test
     public void validateSimpleMatrix() {
-        ViewModel viewModel = new ViewModel();
         viewModel.matrixProperty().setValue(getResourceAsString("SimpleGraph.json"));
 
         viewModel.graphInit();
@@ -37,7 +54,6 @@ public class ViewModelTest {
 
     @Test
     public void validateNonNumericMatrix() {
-        ViewModel viewModel = new ViewModel();
         viewModel.matrixProperty().setValue("qq");
 
         viewModel.graphInit();
@@ -47,7 +63,6 @@ public class ViewModelTest {
 
     @Test
     public void validateEmptyNumericMatrix() {
-        ViewModel viewModel = new ViewModel();
 
         viewModel.graphInit();
 
@@ -56,7 +71,6 @@ public class ViewModelTest {
 
     @Test
     public void validateGraphWithNegativeEdgesMatrix() {
-        ViewModel viewModel = new ViewModel();
         viewModel.matrixProperty().setValue(getResourceAsString("JsonWithNegativeEdge.json"));
 
         viewModel.graphInit();
@@ -66,7 +80,6 @@ public class ViewModelTest {
 
     @Test
     public void validateGraphWithoutEdges() {
-        ViewModel viewModel = new ViewModel();
         viewModel.matrixProperty().setValue(getResourceAsString("JsonWithoutEdges.json"));
 
         viewModel.graphInit();
@@ -76,7 +89,6 @@ public class ViewModelTest {
 
     @Test
     public void validateGraphWithoutWeightInEdge() {
-        ViewModel viewModel = new ViewModel();
         viewModel.matrixProperty().setValue(getResourceAsString(
                 "JsonWithoutMandatoryParameterInEdge.json"));
 
@@ -87,7 +99,6 @@ public class ViewModelTest {
 
     @Test
     public void validateStartVertex() {
-        ViewModel viewModel = new ViewModel();
         viewModel.matrixProperty().setValue(getResourceAsString("SimpleGraph.json"));
         viewModel.startVertexProperty().setValue("1");
 
@@ -98,7 +109,6 @@ public class ViewModelTest {
 
     @Test
     public void validateInvalidStartVertex() {
-        ViewModel viewModel = new ViewModel();
         viewModel.matrixProperty().setValue(getResourceAsString("SimpleGraph.json"));
         viewModel.startVertexProperty().setValue("asd");
 
@@ -109,7 +119,6 @@ public class ViewModelTest {
 
     @Test
     public void canCalculateGraph() {
-        ViewModel viewModel = new ViewModel();
         viewModel.matrixProperty().setValue(getResourceAsString("SimpleGraph.json"));
         viewModel.startVertexProperty().setValue("1");
         viewModel.finishVertexProperty().setValue("3");
@@ -121,7 +130,6 @@ public class ViewModelTest {
 
     @Test
     public void canCalculateGraphByVertexOutOfGraph() {
-        ViewModel viewModel = new ViewModel();
         viewModel.matrixProperty().setValue(getResourceAsString("SimpleGraph.json"));
         viewModel.startVertexProperty().setValue("1");
         viewModel.finishVertexProperty().setValue("6");

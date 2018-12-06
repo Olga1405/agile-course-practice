@@ -5,11 +5,15 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import javafx.beans.property.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import ru.unn.agile.dijkstra.model.Edge;
 import ru.unn.agile.dijkstra.model.Graph;
 import ru.unn.agile.dijkstra.model.Vertex;
 
+
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -21,10 +25,44 @@ public class ViewModel {
 
     private final StringProperty result = new SimpleStringProperty();
     private final StringProperty status = new SimpleStringProperty();
+    private final StringProperty log = new SimpleStringProperty();
+
+    private final List<ValueChangeListener> valueChangedListeners = new ArrayList<>();
+
+    private ILogger logger;
 
     private final ObjectMapper mapper = new ObjectMapper();
 
+    public List<String> getLogList() {
+        return logger.getLog();
+    }
+
+    public String getLog() {
+        return log.get();
+    }
+
+    public StringProperty logProperty() {
+        return log;
+    }
+
+    public final void setLogger(final ILogger logger) {
+        if (logger == null) {
+            throw new IllegalArgumentException("Logger can't be empthy");
+        }
+        this.logger = logger;
+    }
+
     public ViewModel() {
+        init();
+    }
+
+    public ViewModel(final ILogger logger) {
+        setLogger(logger);
+        init();
+    }
+
+
+    private void init() {
         mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         mapper.disable(SerializationFeature.WRITE_EMPTY_JSON_ARRAYS);
         mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
@@ -35,7 +73,20 @@ public class ViewModel {
         matrix.set("");
         startVertex.set("");
         finishVertex.set("");
+        log.set("");
         status.set("Click Calculate Button after populating data");
+
+        initFieldsListeners();
+    }
+
+    private void appendLog(final String s) {
+        logger.log(s);
+
+        StringBuilder logMsg = new StringBuilder();
+        for (String line : logger.getLog()) {
+            logMsg.append(line).append("\n");
+        }
+        log.set(logMsg.toString());
     }
 
     public void calculate() {
@@ -48,14 +99,41 @@ public class ViewModel {
 
             result.set(String.valueOf(weight));
             status.set(new Status(StatusType.SUCCESS).toString());
+            StringBuilder message = new StringBuilder(LogMessages.CALCULATED_DISTANCE);
+            message.append("Start vertex = ").append(startVertex.getId())
+                    .append("; Finish vertex = ").append(finishVertex.getId())
+                    .append("; Result = ").append(weight)
+                    .append(".");
+            logger.log(message.toString());
+            updateLogs();
 
         } catch (IllegalArgumentException e) {
             status.set(new Status(StatusType.BAD_REQUEST, e.getMessage()).toString());
         }
     }
 
+    private void initFieldsListeners() {
+        final List<StringProperty> fields = new ArrayList<StringProperty>() {
+            {
+                add(matrix);
+                add(startVertex);
+                add(finishVertex);
+            }
+        };
+
+        for (StringProperty field : fields) {
+            final ValueChangeListener listener = new ValueChangeListener();
+            field.addListener(listener);
+            valueChangedListeners.add(listener);
+        }
+}
+
     public Vertex parseVertex(final StringProperty value) {
         try {
+            StringBuilder message = new StringBuilder(LogMessages.VALUE_CHANGE);
+            message.append("Change value = ").append(value.getValue()).append(".");
+            logger.log(message.toString());
+            updateLogs();
             return new Vertex(Integer.parseInt(value.getValue()));
         } catch (NumberFormatException e) {
             status.setValue(new Status(StatusType.BAD_REQUEST,
@@ -72,6 +150,12 @@ public class ViewModel {
 
             Graph graph = new Graph(edges);
             status.set(new Status(StatusType.SUCCESS).toString());
+
+
+            StringBuilder message = new StringBuilder(LogMessages.VALUE_CHANGE);
+            message.append("Graph = ").append(matrix.get()).append(".");
+            logger.log(message.toString());
+            updateLogs();
 
             return graph;
 
@@ -101,5 +185,38 @@ public class ViewModel {
 
     public final String getStatus() {
         return status.get();
+    }
+
+    private void updateLogs() {
+        List<String> fullLog = logger.getLog();
+        String record = new String("");
+        for (String log : fullLog) {
+            record += log + "\n";
+        }
+        log.set(record);
+    }
+
+     final class LogMessages {
+         public static final String CALCULATED_DISTANCE = "Button click: ";
+         public static final String VALUE_CHANGE = "Input changed: ";
+
+         private LogMessages() { }
+    }
+
+    private class ValueChangeListener implements ChangeListener<Object> {
+        @Override
+        public void changed(final ObservableValue<?> observable,
+                            final Object oldValue, final Object newValue) {
+            status.set(getStatus());
+
+            StringBuilder message = new StringBuilder(LogMessages.VALUE_CHANGE);
+            message.append("Input arguments are: [")
+                    .append(startVertex.get()).append("; ")
+                    .append(finishVertex.get()).append("; ")
+                    .append(matrix.get()).append("] ");
+            logger.log(message.toString());
+            updateLogs();
+
+        }
     }
 }
