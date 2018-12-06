@@ -17,16 +17,16 @@ public class ViewModelTest {
     private ViewModel viewModel;
 
     @Before
-    public void setUp() {
+    public void init() {
         viewModel = new ViewModel(new FakeLogger());
     }
 
     @After
-    public void tearDown() {
+    public void destroy() {
         viewModel = null;
     }
 
-    protected void setExternalViewModel(final ViewModel viewModel) {
+    protected void setViewModel(final ViewModel viewModel) {
         this.viewModel = viewModel;
     }
 

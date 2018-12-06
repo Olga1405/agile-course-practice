@@ -5,11 +5,10 @@ import ru.unn.agile.dijkstra.viewModel.ViewModel;
 import ru.unn.agile.dijkstra.viewModel.ViewModelTest;
 
 public class ViewModelWithTxtLogger extends ViewModelTest {
-    @Override
     public void setUp() {
         TxtLogger realLogger =
                 new TxtLogger("./ViewModelWithTxtLoggerTest.log");
-        super.setExternalViewModel(new ViewModel(realLogger));
+        super.setViewModel(new ViewModel(realLogger));
     }
 }
 

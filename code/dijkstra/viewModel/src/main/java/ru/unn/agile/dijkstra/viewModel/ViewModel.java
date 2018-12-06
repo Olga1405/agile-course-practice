@@ -33,10 +33,6 @@ public class ViewModel {
 
     private final ObjectMapper mapper = new ObjectMapper();
 
-    public List<String> getLogList() {
-        return logger.getLog();
-    }
-
     public String getLog() {
         return log.get();
     }
@@ -52,15 +48,10 @@ public class ViewModel {
         this.logger = logger;
     }
 
-    public ViewModel() {
-        init();
-    }
-
     public ViewModel(final ILogger logger) {
         setLogger(logger);
         init();
     }
-
 
     private void init() {
         mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
@@ -76,17 +67,7 @@ public class ViewModel {
         log.set("");
         status.set("Click Calculate Button after populating data");
 
-        initFieldsListeners();
-    }
-
-    private void appendLog(final String s) {
-        logger.log(s);
-
-        StringBuilder logMsg = new StringBuilder();
-        for (String line : logger.getLog()) {
-            logMsg.append(line).append("\n");
-        }
-        log.set(logMsg.toString());
+        initListeners();
     }
 
     public void calculate() {
@@ -112,7 +93,7 @@ public class ViewModel {
         }
     }
 
-    private void initFieldsListeners() {
+    private void initListeners() {
         final List<StringProperty> fields = new ArrayList<StringProperty>() {
             {
                 add(matrix);
