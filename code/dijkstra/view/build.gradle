@@ -2,4 +2,5 @@ apply from: rootDir.getAbsolutePath() + '/config/scripts/javafx.plugin'
 
 dependencies {
     compile project(':dijkstra-ViewModel')
+    compile project(':dijkstra-Infrastructure')
 }
