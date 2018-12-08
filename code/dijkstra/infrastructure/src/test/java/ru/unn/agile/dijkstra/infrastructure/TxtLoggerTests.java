@@ -95,4 +95,22 @@ public class TxtLoggerTests {
 
         assertEquals(0, log.size());
     }
+
+    @Test(expected = Test.None.class)
+    public void noThrowForIncorrectPathToFileWhenCreateFileLogger() {
+        txtLogger = new TxtLogger("");
+    }
+
+    @Test(expected = Test.None.class)
+    public void noThrowForIncorrectPathToFileWhenLogByFileLogger() {
+        txtLogger = new TxtLogger("");
+        txtLogger.log("qwe");
+    }
+
+    @Test(expected = Test.None.class)
+    public void noThrowForIncorrectPathToFileWhenGetLogFromFileLogger() {
+        txtLogger = new TxtLogger("");
+        txtLogger.log("qwe");
+        txtLogger.getLog();
+    }
 }
