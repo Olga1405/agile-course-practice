@@ -204,6 +204,13 @@ public class ViewModelTest {
         assertNotNull(viewModel);
     }
 
+    @Test
+    public void canGetLogMessage() {
+        ViewModel.LogMessages log = new ViewModel.LogMessages();
+
+        assertNotNull(log);
+    }
+
     private String changedMessage() {
         return String.format(ViewModel.LogMessages.VALUE_CHANGE,
                 viewModel.matrixProperty().get(),
