@@ -7,8 +7,8 @@ public class FakeLogger implements ILogger {
     private final ArrayList<String> log = new ArrayList<>();
 
     @Override
-    public void log(final String s) {
-        log.add(s);
+    public void log(final String str) {
+        log.add(str);
     }
 
     @Override
