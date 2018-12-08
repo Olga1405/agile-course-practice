@@ -197,7 +197,7 @@ public class ViewModel {
         log.set(record);
     }
 
-    final class LogMessages {
+    public static final class LogMessages {
         public static final String CALCULATED_DISTANCE = "Button click: ";
         public static final String VALUE_CHANGE = "Input changed: ";
     }
