@@ -12,7 +12,7 @@ import ru.unn.agile.dijkstra.viewModel.ILogger;
 public class TxtLogger  implements ILogger {
 
     private static final String DATE_FORMAT_NOW = "yyyy-MM-dd HH:mm:ss";
-    private final BufferedWriter writer;
+    private final BufferedWriter writerLog;
     private final String filename;
 
     private static String now() {
@@ -30,15 +30,15 @@ public class TxtLogger  implements ILogger {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        writer = logWriter;
+        writerLog = logWriter;
     }
 
     @Override
     public void log(final String s) {
         try {
-            writer.write(now() + " > " + s);
-            writer.newLine();
-            writer.flush();
+            writerLog.write(now() + " > " + s);
+            writerLog.newLine();
+            writerLog.flush();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -46,15 +46,15 @@ public class TxtLogger  implements ILogger {
 
     @Override
     public List<String> getLog() {
-        BufferedReader reader;
+        BufferedReader readerLog;
         ArrayList<String> log = new ArrayList<String>();
         try {
-            reader = new BufferedReader(new FileReader(filename));
-            String line = reader.readLine();
+            readerLog = new BufferedReader(new FileReader(filename));
+            String line = readerLog.readLine();
 
             while (line != null) {
                 log.add(line);
-                line = reader.readLine();
+                line = readerLog.readLine();
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
