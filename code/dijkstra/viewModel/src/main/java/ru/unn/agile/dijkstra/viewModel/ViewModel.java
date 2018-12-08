@@ -200,9 +200,6 @@ public class ViewModel {
     final class LogMessages {
         public static final String CALCULATED_DISTANCE = "Button click: ";
         public static final String VALUE_CHANGE = "Input changed: ";
-
-        private LogMessages() {
-        }
     }
 
     private class ValueChangeListener implements ChangeListener<Object> {
