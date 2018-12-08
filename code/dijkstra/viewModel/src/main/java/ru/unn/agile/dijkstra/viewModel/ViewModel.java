@@ -37,8 +37,8 @@ public class ViewModel {
         return log.get();
     }
 
-    public StringProperty logProperty() {
-        return log;
+    public List<String> getLoggerList() {
+        return logger.getLog();
     }
 
     public final void setLogger(final ILogger logger) {
@@ -46,6 +46,10 @@ public class ViewModel {
             throw new IllegalArgumentException("Logger can't be empthy");
         }
         this.logger = logger;
+    }
+
+    public ViewModel() {
+        init();
     }
 
     public ViewModel(final ILogger logger) {
@@ -107,7 +111,7 @@ public class ViewModel {
             field.addListener(listener);
             valueChangedListeners.add(listener);
         }
-}
+    }
 
     public Vertex parseVertex(final StringProperty value) {
         try {
@@ -127,7 +131,7 @@ public class ViewModel {
     public Graph graphInit() {
         try {
             List<Edge> edges = mapper.readValue(matrix.get(),
-                mapper.getTypeFactory().constructCollectionType(List.class, Edge.class));
+                    mapper.getTypeFactory().constructCollectionType(List.class, Edge.class));
 
             Graph graph = new Graph(edges);
             status.set(new Status(StatusType.SUCCESS).toString());
@@ -152,12 +156,24 @@ public class ViewModel {
         return matrix;
     }
 
+    public final String getMatrixProperty() {
+        return matrix.get();
+    }
+
     public StringProperty startVertexProperty() {
         return startVertex;
     }
 
+    public final String getStartVertexProperty() {
+        return startVertex.get();
+    }
+
     public StringProperty finishVertexProperty() {
         return finishVertex;
+    }
+
+    public final String getFinishVertexProperty() {
+        return finishVertex.get();
     }
 
     public final String getResult() {
@@ -166,6 +182,10 @@ public class ViewModel {
 
     public final String getStatus() {
         return status.get();
+    }
+
+    public StringProperty logProperty() {
+        return log;
     }
 
     private void updateLogs() {
@@ -177,11 +197,12 @@ public class ViewModel {
         log.set(record);
     }
 
-     final class LogMessages {
-         public static final String CALCULATED_DISTANCE = "Button click: ";
-         public static final String VALUE_CHANGE = "Input changed: ";
+    final class LogMessages {
+        public static final String CALCULATED_DISTANCE = "Button click: ";
+        public static final String VALUE_CHANGE = "Input changed: ";
 
-         private LogMessages() { }
+        private LogMessages() {
+        }
     }
 
     private class ValueChangeListener implements ChangeListener<Object> {

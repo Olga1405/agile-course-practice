@@ -16,13 +16,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 public class TxtLoggerTests {
-    private static final String TXT = "./TxtLoggerTests.log";
+    private static final String FILENAMELOG = "./TxtLoggerTests.log";
 
     private TxtLogger txtLogger;
 
     @Before
     public void setUp() {
-        txtLogger = new TxtLogger(TXT);
+        txtLogger = new TxtLogger(FILENAMELOG);
     }
 
     @After
@@ -37,7 +37,7 @@ public class TxtLoggerTests {
 
     @Test
     public void isLogFileExist() {
-        File f = new File(TXT);
+        File f = new File(FILENAMELOG);
 
         assertTrue(f.exists());
     }
@@ -45,9 +45,9 @@ public class TxtLoggerTests {
     @Test
     public void canCreateLogFileOnDisk() {
         try {
-            new BufferedReader(new FileReader(TXT));
+            new BufferedReader(new FileReader(FILENAMELOG));
         } catch (FileNotFoundException e) {
-            fail("File " + TXT + " wasn't found!");
+            fail("File " + FILENAMELOG + " wasn't found!");
         }
     }
 
