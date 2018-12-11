@@ -22,9 +22,6 @@ public class TxtLoggerTests {
     private static final String FILE = "File ";
     private static final String NOT_FOUND = " wasn't found!";
 
-    private static final String DATE_TIME =
-            "^\\d{2}.\\d{2}.\\d{4} \\d{2}:\\d{2}:\\d{2} > ";
-
     private TxtLogger txtLogger;
 
     @Before
