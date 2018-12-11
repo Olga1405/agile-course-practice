@@ -3,6 +3,7 @@ package ru.unn.agile.dijkstra.infrastructure;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import ru.unn.agile.dijkstra.viewModel.ILogger;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -22,11 +23,11 @@ public class TxtLoggerTests {
     private static final String FILE = "File ";
     private static final String NOT_FOUND = " wasn't found!";
 
-    private TxtLogger txtLogger;
+    private ILogger txtLogger;
 
     @Before
     public void setUp() {
-        txtLogger = new TxtLogger(FILENAMELOG);
+        txtLogger = LoggerFactory.getLogger(FILENAMELOG);
     }
 
     @After
