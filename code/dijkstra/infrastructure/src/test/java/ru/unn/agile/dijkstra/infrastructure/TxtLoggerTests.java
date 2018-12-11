@@ -8,7 +8,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.List;
 
 import static junit.framework.TestCase.assertNotNull;
 import static junit.framework.TestCase.assertTrue;
@@ -17,6 +16,14 @@ import static org.junit.Assert.fail;
 
 public class TxtLoggerTests {
     private static final String FILENAMELOG = "./TxtLoggerTests.log";
+
+    private static final String ONE_MESSAGE = "One log message";
+    private static final String TWO_MESSAGE = "Two log message";
+    private static final String FILE = "File ";
+    private static final String NOT_FOUND = " wasn't found!";
+
+    private static final String DATE_TIME =
+            "^\\d{2}.\\d{2}.\\d{4} \\d{2}:\\d{2}:\\d{2} > ";
 
     private TxtLogger txtLogger;
 
@@ -47,13 +54,13 @@ public class TxtLoggerTests {
         try {
             new BufferedReader(new FileReader(FILENAMELOG));
         } catch (FileNotFoundException e) {
-            fail("File " + FILENAMELOG + " wasn't found!");
+            fail(FILE + FILENAMELOG + NOT_FOUND);
         }
     }
 
     @Test
     public void canWriteOneLogMessage() {
-        String message = "One log message";
+        String message = ONE_MESSAGE;
         txtLogger.log(message);
 
         int logMessage = txtLogger.getLog().size();
@@ -63,7 +70,7 @@ public class TxtLoggerTests {
 
     @Test
     public void canWriteSomeLogMessage() {
-        String[] messages = {"One", "Two"};
+        String[] messages = {ONE_MESSAGE, TWO_MESSAGE};
         for (String message : messages) {
             txtLogger.log(message);
         }
@@ -74,43 +81,43 @@ public class TxtLoggerTests {
     }
 
     @Test
+    public void canGetLogMessage() {
+        String testMessage = ONE_MESSAGE;
+        txtLogger.log(testMessage);
+        String message = txtLogger.getLog().get(0);
+        assertTrue(message.matches(".*" + ONE_MESSAGE + "$"));
+    }
+
+    @Test
     public void canCreateLoggerNameIsIncorrect() {
-        TxtLogger emptyLogger = new TxtLogger("build/log.log");
+        TxtLogger emptyLogger = new TxtLogger("build/logger.log");
 
         assertEquals(0, emptyLogger.getLog().size());
     }
 
     @Test
     public void canWriteFileNameIsIncorrect() {
-        TxtLogger emptyLogger = new TxtLogger("build/log.log");
-        emptyLogger.log("Message");
+        TxtLogger emptyLogger = new TxtLogger("build/logger.log");
+        emptyLogger.log(ONE_MESSAGE);
 
         assertEquals(1, emptyLogger.getLog().size());
     }
 
-    @Test
-    public void canReadFileNameIsIncorrect() {
-        TxtLogger emptyLogger = new TxtLogger("build/log.log");
-        List<String> log = emptyLogger.getLog();
-
-        assertEquals(0, log.size());
-    }
-
     @Test(expected = Test.None.class)
     public void noThrowForIncorrectPathToFileWhenCreateFileLogger() {
-        txtLogger = new TxtLogger("");
+        txtLogger = new TxtLogger("build/logger.log");
     }
 
     @Test(expected = Test.None.class)
     public void noThrowForIncorrectPathToFileWhenLogByFileLogger() {
-        txtLogger = new TxtLogger("");
-        txtLogger.log("qwe");
+        txtLogger = new TxtLogger("build/logger.log");
+        txtLogger.log(ONE_MESSAGE);
     }
 
     @Test(expected = Test.None.class)
     public void noThrowForIncorrectPathToFileWhenGetLogFromFileLogger() {
-        txtLogger = new TxtLogger("");
-        txtLogger.log("qwe");
+        txtLogger = new TxtLogger("build/logger.log");
+        txtLogger.log(ONE_MESSAGE);
         txtLogger.getLog();
     }
 }

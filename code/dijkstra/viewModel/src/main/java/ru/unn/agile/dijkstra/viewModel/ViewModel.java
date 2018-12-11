@@ -27,6 +27,17 @@ public class ViewModel {
     private final StringProperty status = new SimpleStringProperty();
     private final StringProperty log = new SimpleStringProperty();
 
+    public static final String START = "Start vertex = ";
+    public static final String FINISH = "; Finish vertex = ";
+    public static final String RESULT = "; Result = ";
+    public static final String CHANGE = "Change value = ";
+    public static final String GRAPH = "Graph = ";
+    public static final String INPUT_ARGUMENTS = "Input arguments are: [ ";
+    public static final String LOGGER_EMPTY = "Logger can't be empty";
+    public static final String CLICK_CALCULATE = "Click Calculate Button after populating data";
+    public static final String INVALID_INPUT_JSON = "Invalid Input Json";
+    public static final String INVALID_INPUT_VALUE = "Invalid Input Value: %s";
+
     private final List<ValueChangeListener> valueChangedListeners = new ArrayList<>();
 
     private ILogger logger;
@@ -43,7 +54,7 @@ public class ViewModel {
 
     public final void setLogger(final ILogger logger) {
         if (logger == null) {
-            throw new IllegalArgumentException("Logger can't be empthy");
+            throw new IllegalArgumentException(LOGGER_EMPTY);
         }
         this.logger = logger;
     }
@@ -69,7 +80,7 @@ public class ViewModel {
         startVertex.set("");
         finishVertex.set("");
         log.set("");
-        status.set("Click Calculate Button after populating data");
+        status.set(CLICK_CALCULATE);
 
         initListeners();
     }
@@ -85,9 +96,9 @@ public class ViewModel {
             result.set(String.valueOf(weight));
             status.set(new Status(StatusType.SUCCESS).toString());
             StringBuilder message = new StringBuilder(LogMessages.CALCULATED_DISTANCE);
-            message.append("Start vertex = ").append(startVertex.getId())
-                    .append("; Finish vertex = ").append(finishVertex.getId())
-                    .append("; Result = ").append(weight)
+            message.append(START).append(startVertex.getId())
+                    .append(FINISH).append(finishVertex.getId())
+                    .append(RESULT).append(weight)
                     .append(".");
             logger.log(message.toString());
             updateLogs();
@@ -116,13 +127,13 @@ public class ViewModel {
     public Vertex parseVertex(final StringProperty value) {
         try {
             StringBuilder message = new StringBuilder(LogMessages.VALUE_CHANGE);
-            message.append("Change value = ").append(value.getValue()).append(".");
+            message.append(CHANGE).append(value.getValue()).append(".");
             logger.log(message.toString());
             updateLogs();
             return new Vertex(Integer.parseInt(value.getValue()));
         } catch (NumberFormatException e) {
             status.setValue(new Status(StatusType.BAD_REQUEST,
-                    String.format("Invalid Input Value: %s", value.getValue()))
+                    String.format(INVALID_INPUT_VALUE, value.getValue()))
                     .toString());
         }
         return null;
@@ -138,14 +149,14 @@ public class ViewModel {
 
 
             StringBuilder message = new StringBuilder(LogMessages.VALUE_CHANGE);
-            message.append("Graph = ").append(matrix.get()).append(".");
+            message.append(GRAPH).append(matrix.get()).append(".");
             logger.log(message.toString());
             updateLogs();
 
             return graph;
 
         } catch (IOException e) {
-            status.set(new Status(StatusType.BAD_REQUEST, "Invalid Input Json").toString());
+            status.set(new Status(StatusType.BAD_REQUEST, INVALID_INPUT_JSON).toString());
         } catch (IllegalArgumentException e) {
             status.set(new Status(StatusType.BAD_REQUEST, e.getMessage()).toString());
         }
@@ -209,7 +220,7 @@ public class ViewModel {
             status.set(getStatus());
 
             StringBuilder message = new StringBuilder(LogMessages.VALUE_CHANGE);
-            message.append("Input arguments are: [")
+            message.append(INPUT_ARGUMENTS)
                     .append(startVertex.get()).append("; ")
                     .append(finishVertex.get()).append("; ")
                     .append(matrix.get()).append("] ");

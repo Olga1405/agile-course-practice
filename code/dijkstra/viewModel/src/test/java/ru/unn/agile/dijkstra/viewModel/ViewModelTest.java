@@ -145,7 +145,6 @@ public class ViewModelTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void canGetExceptionForViewModelConstructorWithNullLogger() {
-
         new ViewModel(null);
     }
 

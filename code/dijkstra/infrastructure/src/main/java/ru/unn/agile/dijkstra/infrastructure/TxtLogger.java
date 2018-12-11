@@ -1,9 +1,6 @@
 package ru.unn.agile.dijkstra.infrastructure;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -27,7 +24,7 @@ public class TxtLogger  implements ILogger {
         BufferedWriter logWriter = null;
         try {
             logWriter = new BufferedWriter(new FileWriter(filename));
-        } catch (Exception e) {
+        } catch (IOException  e) {
             e.printStackTrace();
         }
         writerLog = logWriter;
@@ -56,7 +53,7 @@ public class TxtLogger  implements ILogger {
                 log.add(line);
                 line = readerLog.readLine();
             }
-        } catch (Exception e) {
+        } catch (IOException  e) {
             System.out.println(e.getMessage());
         }
 
