@@ -16,8 +16,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 public class TxtLoggerTests {
-    private static final String FILENAMELOG = "./TxtLoggerTests.log";
 
+    private static final String FILENAMELOG = "./TxtLoggerTests.log";
     private static final String ONE_MESSAGE = "One log message";
     private static final String TWO_MESSAGE = "Two log message";
     private static final String FILE = "File ";
